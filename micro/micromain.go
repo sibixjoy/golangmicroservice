@@ -11,9 +11,8 @@ import (
     "github.com/go-resty/resty/v2"
 	"io/ioutil"
 	"encoding/json"
-
 )
-
+//"bytes"
 var db *gorm.DB 
 
 func main() {
@@ -38,6 +37,7 @@ func main() {
 	router.HandleFunc("/GETproduct/{id}", Getproductbyid).Methods("GET")
 	router.HandleFunc("/ADDuser", AddUser).Methods("POST")
 	router.HandleFunc("/ADDorder/{id}", AddOrder).Methods("POST")
+	router.HandleFunc("/getinventoryqtty/{id}/{Quantity}", AddOrderqty).Methods("POST")
 
 	
 	http.ListenAndServe(":8000", router)
@@ -142,4 +142,51 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(jsonString)
     }
+}
+
+
+func AddOrderqty(w http.ResponseWriter, r *http.Request) {
+	
+	client := resty.New()
+	var jsonString string
+	id := mux.Vars(r)["id"]
+    qtty := mux.Vars(r)["Quantity"]
+	
+
+	resp, _ := client.R().
+	Get("http://localhost:8003/getinventoryqty/"+id +"/" +qtty)
+//	res:= (resp.Body)
+//	bodyString := string(res)
+//  log.Print(bodyString)
+	w.Write([]byte(resp.Body()))
+	fmt.Println(resp)
+//respp:= resp
+//fmt.Println(respp)
+res := resp.Body()
+var result map[string]interface{}
+json.Unmarshal(res, &result)
+fmt.Println(result["result"])
+
+
+
+    if result["result"] == true {
+
+		reqBody, _ := ioutil.ReadAll(r.Body)
+	    resporeder, _ := client.R().
+		    SetHeader("Content-Type", "application/json").
+		    SetBody(reqBody).
+		    Post("http://localhost:8001/addorder")
+		
+	w.Write([]byte(resporeder.Body()))
+
+		
+    } else {
+		//w.Write([]byte(resp.Body()))
+
+		jsonString = `"message" : "no stockavilable"`
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(jsonString)
+	
+    }
+
 }
