@@ -1,0 +1,21 @@
+services:
+  userapp:
+    image: user
+    ports:
+      - 8004:8004
+  orderapp:
+    image: order
+    ports:
+      - 8001:8001
+  productapp:
+    image: product
+    ports:
+      - 8002:8002
+  inventoryapp:
+    image: inventory
+    ports:
+      - 8003:8003
+  microapp:
+    image: micro    
+    ports:
+      - 8000:8000    
