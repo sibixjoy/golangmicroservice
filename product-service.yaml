@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: service
+metadata:
+  name: productapp
+spec:
+  ports:
+  - port: 8002
+    targetport: 8002
+  selector:
+    app: productapp

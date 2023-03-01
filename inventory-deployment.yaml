@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: inventoryapp
+spec:
+  replicas: 1
+  selector:
+   matchLables:
+      app: inventoryapp
+  template:
+    metadata: 
+      lables:
+        app: inventoryapp
+    spec: 
+      containers:
+        name: inventoryapp
+        image:  sibixjoy31/inventory:latest
+        ports:
+          containerPort: 8003
+      env:
+      - name: POSTGRES_DB
+        value: micro
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: 1234       
+               
+

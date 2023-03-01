@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: userapp
+spec:
+  replicas: 1
+  selector:
+   matchLables:
+      app: userapp
+  template:
+    metadata: 
+      lables:
+        app: userapp
+    spec: 
+      containers:
+        name: userapp
+        image:  sibixjoy31/user:latest
+        ports:
+          containerPort: 8004
+      env:
+      - name: POSTGRES_DB
+        value: micro
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: 1234       
