@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata: 
+      labels:
+        app: user
+    spec: 
+      containers:
+      - name: user
+        image:  sibixjoy31/user:latest
+        ports:
+        - containerPort: 8004
+ 

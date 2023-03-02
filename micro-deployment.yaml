@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: micro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro
+  template:
+    metadata: 
+      labels:
+        app: micro
+    spec: 
+      containers:
+      - name: micro
+        image:  sibixjoy31/micro:latest
+        ports:
+        - containerPort: 8000
+     
